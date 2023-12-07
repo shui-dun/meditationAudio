@@ -3,3 +3,4 @@
 !bgm.mp3
 content.md
 *.pyc
+cache/

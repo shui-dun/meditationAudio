@@ -1,7 +1,9 @@
 from pydub import AudioSegment
-from gtts import gTTS
-from io import BytesIO
+import os
+import time
+from sha256 import sha256
 from parseText import parseText
+from tts import tts
 
 
 class Meditation:
@@ -12,19 +14,36 @@ class Meditation:
 
     shortBgm = AudioSegment.from_mp3("bgm.mp3")[0:800] - 12
 
-    def addSegment(self, text, time=0.0, withBgm=True):
-        tts = gTTS(text=text, lang='zh-TW')
-        mp3_fp = BytesIO()
-        tts.write_to_fp(mp3_fp)
-        mp3_fp.seek(0)
-        add = AudioSegment.from_mp3(mp3_fp)
+    cacheRoot = "cache/"
+
+    def addSegment(self, text, delay=0.0, withBgm=True):
+        """
+        :param text: 文本
+        :param delay: 朗读文本后的延迟，单位秒
+        :param withBgm: 是否使用bgm，否则使用短bgm
+        """
+        # 如果不存在cache目录，则生成
+        if not os.path.exists(self.cacheRoot):
+            os.mkdir(self.cacheRoot)
+        # 计算文本的sha256值
+        textHash = sha256(text)
+        # 缓存文件
+        cacheFile = os.path.join(self.cacheRoot, textHash + ".mp3")
+        # 如果不存在，则调用tts生成
+        if not os.path.exists(cacheFile):
+            tts(text, cacheFile)
+            time.sleep(30)
+        else:
+            print("cache hit: " + text)
+        # 读取缓存文件
+        add = AudioSegment.from_mp3(cacheFile)
         if withBgm:
             self.audio = self.audio + self.bgm
         else:
             self.audio = self.audio + self.shortBgm
         self.audio = self.audio + add
-        if time > 0:
-            silent = AudioSegment.silent(duration=int(time * 1000))
+        if delay > 0:
+            silent = AudioSegment.silent(duration=int(delay * 1000))
             self.audio = self.audio + silent
 
     def save(self, audioName):
@@ -47,5 +66,3 @@ if __name__ == '__main__':
     m.addSegment('开始放松意识', 60)
     m.addSegment('完成冥想')
     m.save("meditation.mp3")
-
-

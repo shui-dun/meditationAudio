@@ -1,3 +1,0 @@
-gtts
-pydub
-pyttsx3

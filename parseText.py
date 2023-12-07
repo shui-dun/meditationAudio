@@ -20,4 +20,5 @@ def parseText():
     return ans
 
 if __name__ == '__main__':
-    parseText()
+    ans = parseText()
+    print(len(ans))
