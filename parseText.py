@@ -18,7 +18,7 @@ def parseText():
             # 删除所有的*
             line = re.sub(r'\*', '', line)
             if len(line) > 0:
-                ans.append((line, 0 if isTitle else 9))
+                ans.append((line, 0 if isTitle else 5))
     print(ans)
     return ans
 

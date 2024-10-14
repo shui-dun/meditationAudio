@@ -14,7 +14,7 @@ def tts(input, outputPath):
         # "model": "tts-1-hd", # 这个模型的效果更好，但是速度更慢
         "voice": "nova",
         "input": input,
-        "speed": 0.85,
+        "speed": 0.9,
         "response_format": "mp3",
     }
     response = requests.post(url=url, data=json.dumps(query), headers=headers)
