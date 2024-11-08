@@ -2,7 +2,7 @@ from pydub import AudioSegment
 import os
 from sha256 import sha256
 from parseText import parseText
-from tts import tts
+from openai_tts import tts
 
 
 class Meditation:
