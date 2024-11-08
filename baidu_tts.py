@@ -1,6 +1,6 @@
-# coding=utf-8
 import sys
 import json
+import os
 
 IS_PY3 = sys.version_info.major == 3
 if IS_PY3:
@@ -17,20 +17,19 @@ else:
     from urllib2 import URLError
     from urllib import urlencode
 
-API_KEY = '4E1BG9lTnlSeIf1NQxxxxxx'
-SECRET_KEY = '544ca4657ba8002e3dea3ac2f5xxxxxx'
-
-TEXT = "欢迎使用百度语音合成。"
+API_KEY = os.environ['BAIDU_API_KEY']
+SECRET_KEY = os.environ['BAIDU_SECRET_KEY']
 
 # 发音人选择, 基础音库：0为度小美，1为度小宇，3为度逍遥，4为度丫丫，
 # 精品音库：5为度小娇，103为度米朵，106为度博文，110为度小童，111为度小萌，默认为度小美 
-PER = 4
+# 参见 https://cloud.baidu.com/doc/SPEECH/s/Rluv3uq3d
+PER = 4254
 # 语速，取值0-15，默认为5中语速
-SPD = 5
+SPD = 3
 # 音调，取值0-15，默认为5中语调
 PIT = 5
 # 音量，取值0-9，默认为5中音量
-VOL = 5
+VOL = 1
 # 下载的文件格式, 3：mp3(default) 4： pcm-16k 5： pcm-8k 6. wav
 AUE = 3
 
@@ -84,12 +83,13 @@ def fetch_token():
 
 """  TOKEN end """
 
-if __name__ == '__main__':
-    token = fetch_token()
+token = fetch_token()
+
+def tts(TEXT, outputPath):
     tex = quote_plus(TEXT)  # 此处TEXT需要两次urlencode
-    print(tex)
+    print("tts: " + TEXT)
     params = {'tok': token, 'tex': tex, 'per': PER, 'spd': SPD, 'pit': PIT, 'vol': VOL, 'aue': AUE, 'cuid': CUID,
-              'lan': 'zh', 'ctp': 1}  # lan ctp 固定参数
+                'lan': 'zh', 'ctp': 1}  # lan ctp 固定参数
 
     data = urlencode(params)
     print('test on Web Browser' + TTS_URL + '?' + data)
@@ -108,7 +108,7 @@ if __name__ == '__main__':
         result_str = err.read()
         has_error = True
 
-    save_file = "error.txt" if has_error else 'result.' + FORMAT
+    save_file = "error.txt" if has_error else outputPath
     with open(save_file, 'wb') as of:
         of.write(result_str)
 
@@ -118,3 +118,6 @@ if __name__ == '__main__':
         print("tts api  error:" + result_str)
 
     print("result saved as :" + save_file)
+
+if __name__ == '__main__':
+    tts("如果此时有大量的用户请求，都无法在 Redis 中处理", "output.mp3")
