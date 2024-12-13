@@ -12,7 +12,11 @@ def parseText():
             # 如果line以#开头，那么就是标题
             isTitle = re.match(r'^#', line)
             # 将[xxx](yyy)转化为xxx
-            line = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', line)
+            line = re.sub(r'\[([^\[\]]*?)\]\([^\(\)]*?\)', r'\1', line)
+            # 将[[xxx|yyy]]转化为yyy
+            line = re.sub(r'\[\[([^\[\]]*?)\|([^\[\]]*?)\]\]', r'\2', line)
+            # 将[[xxx]]转化为xxx，注意这要在[[xxx|yyy]]之后
+            line = re.sub(r'\[\[([^\[\]]*?)\]\]', r'\1', line)
             # 删除前导的#号、>号、空格、-号、*号、数字、点号
             line = re.sub(r'^[#>\s\-*\d.]+', '', line)
             # 删除所有的*
