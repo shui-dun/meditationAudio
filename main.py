@@ -55,6 +55,10 @@ if __name__ == '__main__':
     m = Meditation()
     items = parseText()
     for item in items:
-        m.addSegment(item[0], item[1])
+        try:
+            m.addSegment(item[0], item[1])
+        except Exception as e:
+            print(e)
     m.addSegment('完成冥想')
     m.save("meditation.mp3")
+    # m.save("meditation_simple.mp3")
