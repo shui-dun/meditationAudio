@@ -9,6 +9,9 @@ def parseText():
             # 如果line以>开头，则跳过
             if re.match(r'^>', line):
                 continue
+            # 如果line是---，则跳过
+            if re.match(r'^---', line):
+                continue
             # 如果line以#开头，那么就是标题
             isTitle = re.match(r'^#', line)
             # 将[xxx](yyy)转化为xxx
