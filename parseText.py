@@ -6,9 +6,6 @@ def parseLine(line):
     # 如果line以>开头，则跳过
     if re.match(r'^>', line):
         return "", False
-    # 如果line是---，则跳过
-    if re.match(r'^---', line):
-        return "", False
     # 如果line以#开头，那么就是标题
     isTitle = re.match(r'^#', line)
     isTitle = bool(isTitle)
@@ -30,14 +27,20 @@ def parseLine(line):
     line = re.sub(r'\*', '', line)
     return line, isTitle
 
-def parseText():
+def parseText(simple):
     ans = []
     # 从content.md中读取内容
     with open('content.md', 'r', encoding='utf-8') as f:
         for line in f:
+            if line.startswith('---'): # simple模式下，只读取---之前的内容
+                if simple:
+                    break
+                else:
+                    continue
             line, isTitle = parseLine(line)
             if len(line) > 0:
                 ans.append((line, 0 if isTitle else 5))
+    ans.append(('完成冥想', 0))
     print(ans)
     return ans
 

@@ -50,15 +50,20 @@ class Meditation:
     def save(self, audioName):
         self.audio.export(audioName, format="mp3")
 
-
-if __name__ == '__main__':
-    m = Meditation()
-    items = parseText()
+def generateMeditation(simple, output):
+    """
+    simple: 是否使用简化版
+    output: 输出文件名
+    """
+    meditation = Meditation()
+    items = parseText(simple)
     for item in items:
         try:
-            m.addSegment(item[0], item[1])
+            meditation.addSegment(item[0], item[1])
         except Exception as e:
             print(e)
-    m.addSegment('完成冥想')
-    m.save("meditation.mp3")
-    # m.save("meditation_simple.mp3")
+    meditation.save(output)
+
+if __name__ == '__main__':
+    generateMeditation(False, "meditation.mp3")
+    generateMeditation(True, "meditation_simple.mp3")
