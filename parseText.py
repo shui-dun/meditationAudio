@@ -39,8 +39,8 @@ def parseText(simple):
                     continue
             line, isTitle = parseLine(line)
             if len(line) > 0:
-                ans.append((line, 0 if isTitle else 5))
-    ans.append(('完成冥想', 0))
+                ans.append((line, isTitle))
+    ans.append(('完成冥想', True))
     print(ans)
     return ans
 

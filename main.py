@@ -5,7 +5,7 @@ from sha256 import sha256
 from parseText import parseText
 from openai_tts import tts
 # from baidu_tts import tts
-
+from rewrite_text import rewrite_text
 
 class Meditation:
     audio = AudioSegment.silent(duration=1000)
@@ -17,12 +17,15 @@ class Meditation:
 
     cacheRoot = "cache/"
 
-    def addSegment(self, text, delay=0.0, longBgm=False):
+    def addSegment(self, text, isTitle, longBgm=False):
         """
         :param text: 文本
         :param delay: 朗读文本后的延迟，单位秒
         :param withBgm: 是否使用bgm，否则使用短bgm
         """
+        delay = 0 if isTitle else 5
+        if not isTitle:
+            text = rewrite_text(text)
         # 如果不存在cache目录，则生成
         if not os.path.exists(self.cacheRoot):
             os.mkdir(self.cacheRoot)
@@ -33,7 +36,7 @@ class Meditation:
         # 如果不存在，则调用tts生成
         if not os.path.exists(cacheFile):
             tts(text, cacheFile)
-            # time.sleep(30)
+            time.sleep(15)
         else:
             print("cache hit: " + text)
         # 读取缓存文件

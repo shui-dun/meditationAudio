@@ -4,3 +4,5 @@
 content.md
 *.pyc
 cache/
+.vscode/
+rewrite-cache/
