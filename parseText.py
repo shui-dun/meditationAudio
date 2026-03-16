@@ -29,8 +29,8 @@ def parseLine(line):
 
 def parseText(simple):
     ans = []
-    # 从content.md中读取内容
-    with open('content.md', 'r', encoding='utf-8') as f:
+    # 从content.txt中读取内容
+    with open('content.txt', 'r', encoding='utf-8') as f:
         for line in f:
             if line.startswith('---'): # simple模式下，只读取---之前的内容
                 if simple:
