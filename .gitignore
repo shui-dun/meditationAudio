@@ -6,3 +6,4 @@ content.txt
 cache/
 .vscode/
 rewrite-cache/
+.venv/

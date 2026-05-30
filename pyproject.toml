@@ -1,0 +1,11 @@
+[project]
+name = "meditationaudio"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydub>=0.25.1",
+    "requests>=2.34.2",
+    "tenacity>=9.1.4",
+]
